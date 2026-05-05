@@ -1,27 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#0A0A0F"
-    android:fitsSystemWindows="true"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thiết bị của tôi"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_devices"
+    <ImageView
+        android:id="@+id/img_main_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="20dp"/>
+        android:scaleType="centerCrop"
+        android:src="@android:color/black" />
 
-</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_nav"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:id="@+id/layout_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thiết bị sẵn dụng"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="24dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_devices"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_settings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_title_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cài đặt giao diện"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="40dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_change_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:text="🖼️ ĐỔI HÌNH NỀN"
+                    app:cornerRadius="20dp"
+                    app:backgroundTint="#26FFFFFF"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="20dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_change_font"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:text="🔤 ĐỔI FONT CHỮ"
+                    app:cornerRadius="20dp"
+                    app:backgroundTint="#26FFFFFF"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- THANH ĐIỀU HƯỚNG BUNG FULL CHIỀU DỌC -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="30dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/glass_border"
+            app:itemIconTint="#FFFFFF"
+            app:itemTextColor="#FFFFFF"
+            app:menu="@menu/bottom_nav_menu"
+            app:labelVisibilityMode="labeled"
+            app:elevation="0dp"/>
+    </RelativeLayout>
+</FrameLayout>

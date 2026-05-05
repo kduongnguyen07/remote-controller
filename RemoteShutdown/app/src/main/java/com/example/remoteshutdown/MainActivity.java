@@ -1,20 +1,21 @@
-package com.example.remoteshutdown; // Đổi nếu package mày khác nhé
+package com.example.remoteshutdown;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable fetchrunnable;
 
-    // Link Firebase chuẩn của mày cộng thêm /devices.json để lấy full list
     private final String firebaseurl = "https://remote-desktop-control-73b66-default-rtdb.asia-southeast1.firebasedatabase.app/devices.json";
+
+    private LinearLayout layouthome, layoutsettings;
+    private ImageView imgmainbg;
+    private boolean ismonospace = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +47,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         rvdevices = findViewById(R.id.rv_devices);
+        layouthome = findViewById(R.id.layout_home);
+        layoutsettings = findViewById(R.id.layout_settings);
+        imgmainbg = findViewById(R.id.img_main_bg);
+
+        // --- KHÚC NÀY TỰ ĐỘNG LOAD LẠI ẢNH NỀN KHI MỞ APP ---
+        SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
+        String savedBg = prefs.getString("bg_uri", null);
+        if (savedBg != null) {
+            try {
+                imgmainbg.setImageURI(Uri.parse(savedBg));
+            } catch (SecurityException e) {
+                // Lỡ ảnh bị xóa khỏi máy thì bỏ qua
+            }
+        }
+
         listdevices = new ArrayList<>();
         client = new OkHttpClient();
 
-        adapter = new DeviceAdapter(listdevices, new DeviceAdapter.ondeviceclicklistener() {
-            @Override
-            public void ondeviceclick(Device device) {
-                // Trang 1 đẩy data sang Trang 2
-                android.content.Intent res = new android.content.Intent(MainActivity.this, ControlActivity.class);
-                res.putExtra("IP_ADDRESS", device.getip());
-                res.putExtra("DEVICE_NAME", device.getname());
-                startActivity(res);
-            }
+        adapter = new DeviceAdapter(listdevices, device -> {
+            Intent ans = new Intent(MainActivity.this, ControlActivity.class);
+            ans.putExtra("IP_ADDRESS", device.getip());
+            ans.putExtra("DEVICE_NAME", device.getname());
+            startActivity(ans);
         });
 
         rvdevices.setLayoutManager(new LinearLayoutManager(this));
         rvdevices.setAdapter(adapter);
 
-        // Vòng lặp 5 giây quét Firebase 1 lần
         fetchrunnable = new Runnable() {
             @Override
             public void run() {
@@ -69,15 +83,64 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         handler.post(fetchrunnable);
+
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomnav = findViewById(R.id.bottom_nav);
+        bottomnav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                layouthome.setVisibility(View.VISIBLE);
+                layoutsettings.setVisibility(View.GONE);
+                return true;
+            } else if (id == R.id.nav_settings) {
+                layouthome.setVisibility(View.GONE);
+                layoutsettings.setVisibility(View.VISIBLE);
+                return true;
+            }
+            return false;
+        });
+
+        // --- NÚT ĐỔI NỀN ĐÃ ĐƯỢC NÂNG CẤP LẤY QUYỀN ---
+        findViewById(R.id.btn_change_bg).setOnClickListener(v -> {
+            Intent res = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            res.addCategory(Intent.CATEGORY_OPENABLE);
+            res.setType("image/*");
+            startActivityForResult(res, 100);
+        });
+
+        findViewById(R.id.btn_change_font).setOnClickListener(v -> {
+            ismonospace = !ismonospace;
+            android.graphics.Typeface newfont = ismonospace ? android.graphics.Typeface.MONOSPACE : android.graphics.Typeface.DEFAULT_BOLD;
+            ((TextView) findViewById(R.id.tv_title_home)).setTypeface(newfont);
+            ((TextView) findViewById(R.id.tv_title_settings)).setTypeface(newfont);
+            Toast.makeText(this, "Đã đổi Font chữ!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    // --- XỬ LÝ LƯU ẢNH NỀN VĨNH VIỄN VÀO BỘ NHỚ ---
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            Uri res = data.getData();
+            if (res != null) {
+                // Xin Android cấp quyền truy cập cái ảnh này mãi mãi
+                getContentResolver().takePersistableUriPermission(res, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                // Lưu đường dẫn ảnh vào sổ tay SharedPreferences
+                SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
+                prefs.edit().putString("bg_uri", res.toString()).apply();
+
+                // Set ảnh lên màn hình luôn
+                imgmainbg.setImageURI(res);
+            }
+        }
     }
 
     private void fetch_devices_from_firebase() {
         Request request = new Request.Builder().url(firebaseurl).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                // Không log gì ra UI để đỡ phiền nếu mạng lag
-            }
+            public void onFailure(Call call, IOException e) {}
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -111,113 +174,13 @@ public class MainActivity extends AppCompatActivity {
                     ans.add(device);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return ans;
-    }
-
-    // Hiển thị Bottom Sheet hiện đại
-    // Hiển thị Bottom Sheet hiện đại nhiều nút
-    private void show_control_panel(Device device) {
-        com.google.android.material.bottomsheet.BottomSheetDialog res = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
-        android.view.View view = getLayoutInflater().inflate(R.layout.layout_bottom_sheet, null);
-
-        android.widget.TextView tvname = view.findViewById(R.id.tv_sheet_name);
-        android.widget.TextView tvip = view.findViewById(R.id.tv_sheet_ip);
-        tvname.setText(device.getname());
-        tvip.setText(device.getip());
-
-        // Khai báo các nút Cụm Âm Lượng
-        android.widget.Button btnvoldown = view.findViewById(R.id.btn_vol_down);
-        android.widget.Button btnvolmute = view.findViewById(R.id.btn_vol_mute);
-        android.widget.Button btnvolup = view.findViewById(R.id.btn_vol_up);
-
-        // Khai báo các nút Cụm Nguồn
-        android.widget.Button btnlock = view.findViewById(R.id.btn_lock);
-        android.widget.Button btnsleep = view.findViewById(R.id.btn_sleep);
-        android.widget.Button btnhibernate = view.findViewById(R.id.btn_hibernate);
-        android.widget.Button btnshutdown = view.findViewById(R.id.btn_shutdown);
-        android.widget.Button btnabort = view.findViewById(R.id.btn_abort);
-
-        // Khai báo Cụm Thông báo
-        android.widget.EditText etmessage = view.findViewById(R.id.et_message);
-        android.widget.Button btnsendmsg = view.findViewById(R.id.btn_send_msg);
-
-        // --- Bắt sự kiện bắn Socket ---
-        btnvoldown.setOnClickListener(v -> send_socket_command(device.getip(), "VOL_DOWN"));
-        btnvolmute.setOnClickListener(v -> send_socket_command(device.getip(), "VOL_MUTE"));
-        btnvolup.setOnClickListener(v -> send_socket_command(device.getip(), "VOL_UP"));
-
-        btnlock.setOnClickListener(v -> { send_socket_command(device.getip(), "LOCK"); res.dismiss(); });
-        btnsleep.setOnClickListener(v -> { send_socket_command(device.getip(), "SLEEP"); res.dismiss(); });
-        btnhibernate.setOnClickListener(v -> { send_socket_command(device.getip(), "HIBERNATE"); res.dismiss(); });
-        btnshutdown.setOnClickListener(v -> { send_socket_command(device.getip(), "OFF"); res.dismiss(); });
-        btnabort.setOnClickListener(v -> send_socket_command(device.getip(), "ABORT"));
-
-        btnsendmsg.setOnClickListener(v -> {
-            String msg = etmessage.getText().toString().trim();
-            if (!msg.isEmpty()) {
-                send_socket_command(device.getip(), "MSG_" + msg);
-                etmessage.setText("");
-            } else {
-                android.widget.Toast.makeText(this, "Viết gì đi chứ!", android.widget.Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        res.setContentView(view);
-        res.show();
-    }
-
-    // Đâm Socket gửi mật mã tuỳ chỉnh
-    private void send_socket_command(String ipaddress, String command) {
-        new Thread(() -> {
-            boolean ans = false;
-            try (Socket socket = new Socket(ipaddress, 9999);
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                out.println(command); // Bắn lệnh đi
-                ans = true;
-            } catch (IOException e) {
-                ans = false;
-            }
-
-            boolean finalans = ans;
-            runOnUiThread(() -> {
-                if (finalans) {
-                    Toast.makeText(this, "Đã gửi lệnh: " + command, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Lỗi kết nối! Kiểm tra lại tường lửa Laptop.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }).start();
-    }
-
-    // Đâm Socket chọt thẳng vào Server Laptop
-    private void send_shutdown_command(String ipaddress) {
-        new Thread(() -> {
-            boolean ans = false;
-            try (Socket socket = new Socket(ipaddress, 9999);
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                out.println("OFF"); // Câu thần chú tắt nguồn
-                ans = true;
-            } catch (IOException e) {
-                ans = false;
-            }
-
-            boolean finalans = ans;
-            runOnUiThread(() -> {
-                if (finalans) {
-                    Toast.makeText(this, "Đã gửi lệnh tắt máy thành công!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Lỗi kết nối! Kiểm tra lại tường lửa Laptop.", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }).start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(fetchrunnable); // Xóa thread chống rò rỉ RAM
+        handler.removeCallbacks(fetchrunnable);
     }
 }
