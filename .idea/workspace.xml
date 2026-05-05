@@ -5,60 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e949c22-d612-4ce9-9f80-047462fc123b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/md5-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/sha1-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/file-system.probe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/.gradle/vcs-1/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/vcs-1/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/build.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/local.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/Device.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/DeviceAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/layout/activity_main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/layout/item_device.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/colors.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/strings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/themes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/build.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-app/settings.gradle.kts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/FirebaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/FirebaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/MacUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/MacUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/remote-controller.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_control.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_control.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/item_device.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/item_device.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

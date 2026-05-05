@@ -1,50 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="#121212">
-    android:fitsSystemWindows="true"
+    android:padding="32dp"
+    android:gravity="center"
+    android:background="#0A0A10"
+    android:fitsSystemWindows="true">
 
-    <!-- Thông tin máy -->
-    <TextView
-        android:id="@+id/tv_device_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:text="Tên máy tính" />
-    <TextView
-        android:id="@+id/tv_device_ip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#BDBDBD"
-        android:layout_marginBottom="40dp"
-        android:text="192.168.1.1" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="50dp">
+        <TextView
+            android:id="@+id/tv_device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:text="Tên máy tính" />
+        <TextView
+            android:id="@+id/tv_device_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#888888"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp"
+            android:text="192.168.1.1" />
+    </LinearLayout>
 
-    <!-- Mục Lớn 1: Popup Âm Lượng -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_pop_volume"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="🔊 ĐIỀU KHIỂN ÂM LƯỢNG"
-        android:textSize="18sp"
+        android:text="🔊 ÂM LƯỢNG"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:backgroundTint="#455A64"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="24dp"/>
+        android:textColor="#E0E0E0"
+        app:backgroundTint="#1AFFFFFF"
+        app:strokeColor="#33FFFFFF"
+        app:strokeWidth="1dp"
+        app:cornerRadius="24dp"
+        android:layout_marginBottom="24dp"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
 
-    <!-- Mục Lớn 2: Popup Nguồn -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_pop_power"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="⚡ NGUỒN &amp; HỆ THỐNG"
-        android:textSize="18sp"
+        android:text="⚡ NGUỒN"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:backgroundTint="#D32F2F"
-        android:textColor="#FFFFFF" />
-    <Button android:id="@+id/btn_open_monitor" android:layout_width="match_parent" android:layout_height="80dp" android:text="💻 BẬT TASK MANAGER" android:textSize="18sp" android:textStyle="bold" android:backgroundTint="#000000" android:textColor="#00FF00" android:layout_marginBottom="24dp"/>
+        android:textColor="#FF8A80"
+        app:backgroundTint="#1AFF5252"
+        app:strokeColor="#33FF5252"
+        app:strokeWidth="1dp"
+        app:cornerRadius="24dp"
+        android:layout_marginBottom="24dp"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_open_monitor"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="💻 TASK MANAGER"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#69F0AE"
+        app:backgroundTint="#1A00E676"
+        app:strokeColor="#3300E676"
+        app:strokeWidth="1dp"
+        app:cornerRadius="24dp"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
 </LinearLayout>

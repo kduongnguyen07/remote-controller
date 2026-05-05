@@ -3,22 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#121212"
+    android:background="#0A0A0F"
     android:fitsSystemWindows="true"
-    android:padding="16dp">
+    android:padding="24dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Danh sách thiết bị"
+        android:text="Thiết bị của tôi"
         android:textColor="#FFFFFF"
-        android:textSize="26sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_devices"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"/>
 
 </LinearLayout>
