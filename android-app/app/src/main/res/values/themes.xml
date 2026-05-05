@@ -1,0 +1,5 @@
+﻿<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.RemoteShutdown" parent="Theme.Material3.Dark.NoActionBar">
+    </style>
+    <style name="Theme.RemoteShutdown" parent="Base.Theme.RemoteShutdown" />
+</resources>

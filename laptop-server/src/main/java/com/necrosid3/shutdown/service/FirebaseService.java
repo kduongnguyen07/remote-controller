@@ -31,11 +31,13 @@ public class FirebaseService {
         jsondata.put("last_seen", currenttime);
 
         String url = Config.FIREBASE_URL + "/devices/" + macaddress + ".json";
-        
-        RequestBody body = RequestBody.create(jsondata.toString(), jsonmediatype);
+
+        // Đảo lại thứ tự (MediaType, String) để không bị IDE gạch ngang chửi deprecated
+        RequestBody body = RequestBody.create(jsonmediatype, jsondata.toString());
+
         Request request = new Request.Builder()
                 .url(url)
-                .put(body) // Use PUT to write/overwrite data at this exact location
+                .put(body)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -45,9 +47,9 @@ public class FirebaseService {
                 System.err.println("failed to update firebase. code: " + response.code());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("network error when updating firebase.");
         }
-        
+
         return ans;
     }
 }

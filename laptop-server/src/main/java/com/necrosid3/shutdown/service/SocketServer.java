@@ -17,19 +17,19 @@ public class SocketServer extends Thread {
             System.out.println("socket server started on port " + port);
 
             while (running) {
-                try {
-                    Socket clientsocket = serversocket.accept();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
+                // Nhét mẹ nó vào ngoặc try, đéo bao giờ sợ quên close
+                try (Socket clientsocket = serversocket.accept();
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()))) {
+
                     String command = in.readLine();
 
                     if (command != null && command.trim().equalsIgnoreCase("OFF")) {
                         System.out.println("received shutdown command!");
                         Runtime.getRuntime().exec("shutdown -s -t 0");
                     }
-                    clientsocket.close();
                 } catch (IOException e) {
                     if (running) {
-                        e.printStackTrace();
+                        System.err.println("socket accept/read error: " + e.getMessage());
                     }
                 }
             }
