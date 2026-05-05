@@ -1,0 +1,7 @@
+com\necrosid3\shutdown\util\Config.class
+com\necrosid3\shutdown\util\MacUtil.class
+com\necrosid3\shutdown\Main.class
+com\necrosid3\shutdown\service\SocketServer.class
+com\necrosid3\shutdown\Main$1.class
+com\necrosid3\shutdown\model\DeviceInfo.class
+com\necrosid3\shutdown\service\FirebaseService.class
