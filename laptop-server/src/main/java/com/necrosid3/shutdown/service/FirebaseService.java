@@ -7,11 +7,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 public class FirebaseService {
-
     private final OkHttpClient client;
     private final MediaType jsonmediatype;
 
@@ -31,25 +29,15 @@ public class FirebaseService {
         jsondata.put("last_seen", currenttime);
 
         String url = Config.FIREBASE_URL + "/devices/" + macaddress + ".json";
-
-        // Đảo lại thứ tự (MediaType, String) để không bị IDE gạch ngang chửi deprecated
         RequestBody body = RequestBody.create(jsonmediatype, jsondata.toString());
 
-        Request request = new Request.Builder()
-                .url(url)
-                .put(body)
-                .build();
+        Request request = new Request.Builder().url(url).put(body).build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                ans = true;
-            } else {
-                System.err.println("failed to update firebase. code: " + response.code());
-            }
+            if (response.isSuccessful()) ans = true;
         } catch (IOException e) {
-            System.err.println("network error when updating firebase.");
+            System.err.println("Lỗi mạng Firebase!");
         }
-
         return ans;
     }
 }

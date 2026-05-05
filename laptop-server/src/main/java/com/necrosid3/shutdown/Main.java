@@ -3,98 +3,58 @@ package com.necrosid3.shutdown;
 import com.necrosid3.shutdown.service.FirebaseService;
 import com.necrosid3.shutdown.service.SocketServer;
 import com.necrosid3.shutdown.util.MacUtil;
-
-import java.awt.AWTException;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
-
     private static SocketServer socketserver;
     private static Timer heartbeattimer;
     private static FirebaseService firebaseservice;
-    private static String macaddress;
-    private static String ipaddress;
-    private static String devicename;
 
     public static void main(String[] args) {
-        System.out.println("starting laptop server...");
-
         firebaseservice = new FirebaseService();
-        macaddress = MacUtil.getMacAddress();
-        ipaddress = MacUtil.getIpAddress();
-        devicename = MacUtil.getDeviceName();
+        String mac = MacUtil.getMacAddress();
+        String ip = MacUtil.getIpAddress();
+        String name = MacUtil.getDeviceName();
 
-        // Đăng ký Shutdown Hook: Bất tử cmnl, máy tắt kiểu gì cũng báo OFFLINE được
+        // Shutdown Hook: Báo Offline trước khi JVM bị kill[cite: 25]
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("jvm is shutting down. reporting offline...");
-            if (socketserver != null) {
-                socketserver.stopServer();
-            }
-            if (heartbeattimer != null) {
-                heartbeattimer.cancel();
-            }
-            firebaseservice.updateDeviceInfo(macaddress, devicename, ipaddress, "OFFLINE");
+            firebaseservice.updateDeviceInfo(mac, name, ip, "OFFLINE");
         }));
 
         setupSystemTray();
+        firebaseservice.updateDeviceInfo(mac, name, ip, "ONLINE");
 
-        // report initial status
-        firebaseservice.updateDeviceInfo(macaddress, devicename, ipaddress, "ONLINE");
-
-        // heartbeat loop every 60 seconds
         heartbeattimer = new Timer();
         heartbeattimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                firebaseservice.updateDeviceInfo(macaddress, devicename, ipaddress, "ONLINE");
-                System.out.println("heartbeat sent to firebase.");
+                firebaseservice.updateDeviceInfo(mac, name, ip, "ONLINE");
             }
         }, 60000, 60000);
 
-        // start socket server
         socketserver = new SocketServer();
         socketserver.start();
     }
 
     private static void setupSystemTray() {
-        if (!SystemTray.isSupported()) {
-            System.err.println("system tray is not supported on this platform!");
-            return;
-        }
-
+        if (!SystemTray.isSupported()) return;
         SystemTray tray = SystemTray.getSystemTray();
-
-        int iconsize = 16;
-        BufferedImage image = new BufferedImage(iconsize, iconsize, BufferedImage.TYPE_INT_ARGB);
-        java.awt.Graphics2D g = image.createGraphics();
-        g.setColor(java.awt.Color.RED);
-        g.fillOval(0, 0, iconsize, iconsize);
+        BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        g.setColor(Color.RED);
+        g.fillOval(0, 0, 16, 16);
         g.dispose();
 
         PopupMenu popup = new PopupMenu();
         MenuItem exititem = new MenuItem("Exit");
-
-        exititem.addActionListener(e -> {
-            System.out.println("exiting app from tray...");
-            // Chỉ cần gọi System.exit(0), cái Shutdown Hook ở trên sẽ tự động nhảy vào làm việc
-            System.exit(0);
-        });
-
+        exititem.addActionListener(e -> System.exit(0));
         popup.add(exititem);
 
-        TrayIcon trayicon = new TrayIcon(image, "Laptop Remote Shutdown", popup);
-        trayicon.setImageAutoSize(true);
-
         try {
-            tray.add(trayicon);
-        } catch (AWTException e) {
-            System.err.println("tray icon could not be added.");
-        }
+            tray.add(new TrayIcon(image, "Remote Shutdown", popup));
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }

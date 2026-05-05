@@ -29,9 +29,32 @@ public class MacUtil {
     public static String getIpAddress() {
         String ans = "";
         try {
-            InetAddress localhost = InetAddress.getLocalHost();
-            ans = localhost.getHostAddress();
-        } catch (UnknownHostException e) {
+            java.util.Enumeration<java.net.NetworkInterface> interfaces = java.net.NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                java.net.NetworkInterface networkInterface = interfaces.nextElement();
+
+                // Bỏ qua các mạng đã tắt hoặc mạng ảo loopback
+                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+
+                java.util.Enumeration<java.net.InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    java.net.InetAddress addr = addresses.nextElement();
+
+                    // Chỉ lấy chuẩn IPv4 và là mạng LAN cục bộ (như 192.168.x.x), tự động né IP của Radmin VPN
+                    if (addr instanceof java.net.Inet4Address && addr.isSiteLocalAddress()) {
+                        ans = addr.getHostAddress();
+                        return ans; // Tìm thấy phát là chốt luôn
+                    }
+                }
+            }
+
+            // Nếu đen quá đéo tìm được thì mới xài cách cũ
+            if (ans.isEmpty()) {
+                ans = java.net.InetAddress.getLocalHost().getHostAddress();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ans;

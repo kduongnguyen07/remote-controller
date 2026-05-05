@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#121212">
+    android:fitsSystemWindows="true"
+
+    <!-- Thông tin máy -->
+    <TextView
+        android:id="@+id/tv_device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:text="Tên máy tính" />
+    <TextView
+        android:id="@+id/tv_device_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#BDBDBD"
+        android:layout_marginBottom="40dp"
+        android:text="192.168.1.1" />
+
+    <!-- Mục Lớn 1: Popup Âm Lượng -->
+    <Button
+        android:id="@+id/btn_pop_volume"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="🔊 ĐIỀU KHIỂN ÂM LƯỢNG"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:backgroundTint="#455A64"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Mục Lớn 2: Popup Nguồn -->
+    <Button
+        android:id="@+id/btn_pop_power"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="⚡ NGUỒN &amp; HỆ THỐNG"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF" />
+    <Button android:id="@+id/btn_open_monitor" android:layout_width="match_parent" android:layout_height="80dp" android:text="💻 BẬT TASK MANAGER" android:textSize="18sp" android:textStyle="bold" android:backgroundTint="#000000" android:textColor="#00FF00" android:layout_marginBottom="24dp"/>
+</LinearLayout>

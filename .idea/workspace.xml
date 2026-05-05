@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3e949c22-d612-4ce9-9f80-047462fc123b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/md5-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/checksums/sha1-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/9.0.0/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/file-system.probe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/.gradle/vcs-1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileChanges/last-build.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/fileHashes/fileHashes.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/9.0.0/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/.gradle/vcs-1/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/local.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/Device.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/DeviceAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/java/com/example/remoteshutdown/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/layout/activity_main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/layout/item_device.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/colors.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/strings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/app/src/main/res/values/themes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/build.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/gradle.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-app/settings.gradle.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/FirebaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/FirebaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/MacUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/util/MacUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/remote-controller.iml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;kduongnguyen150807&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kduongnguyen07/remote-controller.git&quot;,
+    &quot;accountId&quot;: &quot;177b9a88-eff7-468d-adf4-ffecd5acc336&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="3DJSjeM4AuE2jdUug4LNIqYQTvb" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e949c22-d612-4ce9-9f80-047462fc123b" name="Changes" comment="" />
+      <created>1777998816723</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777998816723</updated>
+    </task>
+    <servers />
+  </component>
+</project>
