@@ -42,9 +42,8 @@ public class SocketServer extends Thread {
                                 ans.put("ram_used", totalram - freeram);
                                 ans.put("ram_total", totalram);
 
-                                // Lấy thông số Task Manager bằng OSHI
                                 oshi.SystemInfo si = new oshi.SystemInfo();
-                                oshi.hardware.HardwareAbstractionLayer hal = si.getHardware(); // <--- hal CỦA MÀY ĐÂY
+                                oshi.hardware.HardwareAbstractionLayer hal = si.getHardware();
                                 oshi.software.os.OperatingSystem os = si.getOperatingSystem();
 
                                 ans.put("cpu_name", hal.getProcessor().getProcessorIdentifier().getName());
@@ -53,7 +52,6 @@ public class SocketServer extends Thread {
                                 long upsec = os.getSystemUptime();
                                 ans.put("uptime", String.format(java.util.Locale.US, "%02d:%02d:%02d", upsec / 3600, (upsec % 3600) / 60, upsec % 60));
 
-                                // GPU RTX
                                 int gpuutil = 0, gputemp = 0;
                                 try {
                                     Process process = Runtime.getRuntime().exec("nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits");
@@ -68,12 +66,10 @@ public class SocketServer extends Thread {
                                 ans.put("gpu_util", gpuutil);
                                 ans.put("gpu_temp", gputemp);
 
-                                // Giờ máy tính
                                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss");
                                 String pctime = sdf.format(new java.util.Date());
                                 ans.put("pc_time", pctime);
 
-                                // Trạng thái Pin & Sạc
                                 java.util.List<oshi.hardware.PowerSource> powersources = hal.getPowerSources();
                                 boolean ischarging = true;
                                 int batterypct = 100;
@@ -91,7 +87,6 @@ public class SocketServer extends Thread {
                                 out.println("{\"error\": true}");
                             }
                         }
-                        // Các lệnh hệ thống
                         else if (command.equals("OFF")) {
                             Runtime.getRuntime().exec("cmd.exe /c shutdown -s -t 0");
                         } else if (command.equals("LOCK")) {
@@ -115,6 +110,45 @@ public class SocketServer extends Thread {
                             Runtime.getRuntime().exec("powershell.exe -Command \"(new-object -com wscript.shell).SendKeys([char]174)\"");
                         } else if (command.equals("VOL_MUTE")) {
                             Runtime.getRuntime().exec("powershell.exe -Command \"(new-object -com wscript.shell).SendKeys([char]173)\"");
+                        }
+                        // LỆNH KÉO THẢ ÂM LƯỢNG MỚI
+                        else if (command.startsWith("VOL_SET_")) {
+                            try {
+                                int targetVol = Integer.parseInt(command.split("_")[2]);
+                                int upPresses = targetVol / 2;
+
+                                java.io.File vbs = java.io.File.createTempFile("vol", ".vbs");
+                                java.io.PrintWriter pw = new java.io.PrintWriter(vbs);
+                                pw.println("Set objShell = CreateObject(\"WScript.Shell\")");
+                                pw.println("For i = 1 to 50");
+                                pw.println("objShell.SendKeys(chr(&hAE))");
+                                pw.println("Next");
+                                pw.println("For i = 1 to " + upPresses);
+                                pw.println("objShell.SendKeys(chr(&hAF))");
+                                pw.println("Next");
+                                pw.close();
+
+                                Runtime.getRuntime().exec("wscript.exe " + vbs.getAbsolutePath());
+                            } catch (Exception e) {}
+                        }
+                        else if (command.equals("WEBCAM")) {
+                            try {
+                                com.github.sarxos.webcam.Webcam cam = com.github.sarxos.webcam.Webcam.getDefault();
+                                if (cam != null) {
+                                    cam.open();
+                                    java.awt.image.BufferedImage img = cam.getImage();
+                                    cam.close();
+
+                                    java.io.ByteArrayOutputStream os = new java.io.ByteArrayOutputStream();
+                                    javax.imageio.ImageIO.write(img, "jpg", os);
+                                    String ans = java.util.Base64.getEncoder().encodeToString(os.toByteArray());
+                                    out.println("WEBCAM_DATA_" + ans);
+                                } else {
+                                    out.println("ERROR_NOCAM");
+                                }
+                            } catch (Exception e) {
+                                out.println("ERROR");
+                            }
                         }
                     }
                 } catch (IOException e) {

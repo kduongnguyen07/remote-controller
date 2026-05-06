@@ -41,6 +41,26 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout layouthome, layoutsettings;
     private ImageView imgmainbg;
 
+    private final androidx.activity.result.ActivityResultLauncher<com.journeyapps.barcodescanner.ScanOptions> ans = registerForActivityResult(new com.journeyapps.barcodescanner.ScanContract(), res -> {
+        if(res.getContents() != null) {
+            try {
+                JSONObject obj = new JSONObject(res.getContents());
+                String ip = obj.getString("ip");
+                String name = obj.getString("name");
+                String mac = obj.optString("mac", "");
+
+                Intent intent = new Intent(MainActivity.this, ControlActivity.class);
+                intent.putExtra("IP_ADDRESS", ip);
+                intent.putExtra("DEVICE_NAME", name);
+                intent.putExtra("MAC_ADDRESS", mac);
+                startActivity(intent);
+                Toast.makeText(this, "Tóm được máy: " + name, Toast.LENGTH_SHORT).show();
+            } catch(Exception e) {
+                Toast.makeText(this, "Mã QR đéo hợp lệ!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         layoutsettings = findViewById(R.id.layout_settings);
         imgmainbg = findViewById(R.id.img_main_bg);
 
-        // --- LOAD LẠI ẢNH NỀN VÀ FONT CŨ ĐÃ LƯU ---
         SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
         String savedBg = prefs.getString("bg_uri", null);
         String savedFont = prefs.getString("font_type", "SANS_SERIF");
@@ -61,17 +80,18 @@ public class MainActivity extends AppCompatActivity {
             try { imgmainbg.setImageURI(Uri.parse(savedBg)); } catch (SecurityException e) {}
         }
 
-        // Cần delay một tí để View kịp vẽ ra trước khi ép Font
         handler.postDelayed(() -> applyFontToView(getWindow().getDecorView().getRootView(), getFontType(savedFont)), 100);
 
         listdevices = new ArrayList<>();
         client = new OkHttpClient();
 
         adapter = new DeviceAdapter(listdevices, device -> {
-            Intent ans = new Intent(MainActivity.this, ControlActivity.class);
-            ans.putExtra("IP_ADDRESS", device.getip());
-            ans.putExtra("DEVICE_NAME", device.getname());
-            startActivity(ans);
+            Intent intent = new Intent(MainActivity.this, ControlActivity.class);
+            intent.putExtra("IP_ADDRESS", device.getip());
+            intent.putExtra("DEVICE_NAME", device.getname());
+            // CHUYỀN MAC MƯỢT MÀ TỪ DANH SÁCH FIREBASE
+            intent.putExtra("MAC_ADDRESS", device.getmac());
+            startActivity(intent);
         });
 
         rvdevices.setLayoutManager(new LinearLayoutManager(this));
@@ -101,7 +121,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Nút đổi nền
+        View btnscanqr = findViewById(R.id.btn_scan_qr);
+        if (btnscanqr != null) {
+            btnscanqr.setOnClickListener(v -> {
+                com.journeyapps.barcodescanner.ScanOptions res = new com.journeyapps.barcodescanner.ScanOptions();
+                res.setPrompt("Chĩa Camera vào mã QR trên màn hình Laptop");
+                res.setBeepEnabled(true);
+                res.setOrientationLocked(true);
+                res.setCaptureActivity(com.journeyapps.barcodescanner.CaptureActivity.class);
+                ans.launch(res);
+            });
+        }
+
         findViewById(R.id.btn_change_bg).setOnClickListener(v -> {
             Intent res = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             res.addCategory(Intent.CATEGORY_OPENABLE);
@@ -109,29 +140,22 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(res, 100);
         });
 
-        // --- POPUP MENU CHỌN FONT CHỮ ---
         findViewById(R.id.btn_change_font).setOnClickListener(v -> {
-            String[] ans = {"Mặc định (Sang trọng)", "Có chân (Cổ điển)", "Monospace (Dân code)", "Cursive (Mềm mại)"};
-
+            String[] options = {"Mặc định (Sang trọng)", "Có chân (Cổ điển)", "Monospace (Dân code)", "Cursive (Mềm mại)"};
             new android.app.AlertDialog.Builder(this)
                     .setTitle("Chọn phong cách chữ")
-                    .setItems(ans, (dialog, which) -> {
+                    .setItems(options, (dialog, which) -> {
                         String selected = "SANS_SERIF";
                         if (which == 1) selected = "SERIF";
                         else if (which == 2) selected = "MONOSPACE";
                         else if (which == 3) selected = "CURSIVE";
-
-                        // Lưu vào sổ tay
                         getSharedPreferences("AppConfig", MODE_PRIVATE).edit().putString("font_type", selected).apply();
-
-                        // Ép font mới lên toàn màn hình ngay lập tức
                         applyFontToView(getWindow().getDecorView().getRootView(), getFontType(selected));
                         Toast.makeText(this, "Đã đổi Font chữ!", Toast.LENGTH_SHORT).show();
                     }).show();
         });
     }
 
-    // --- HÀM HỖ TRỢ LẤY FONT ---
     private Typeface getFontType(String fontName) {
         switch (fontName) {
             case "SERIF": return Typeface.SERIF;
@@ -141,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // --- HÀM ĐỆ QUY ÉP FONT CHO MỌI CHỮ TRÊN MÀN HÌNH ---
     private void applyFontToView(View view, Typeface typeface) {
         if (view instanceof TextView) {
             ((TextView) view).setTypeface(typeface);
@@ -182,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
                         listdevices.clear();
                         listdevices.addAll(newlist);
                         adapter.notifyDataSetChanged();
-
-                        // Ép font cho mấy cái thẻ máy tính vừa mới load về
                         String savedFont = getSharedPreferences("AppConfig", MODE_PRIVATE).getString("font_type", "SANS_SERIF");
                         applyFontToView(rvdevices, getFontType(savedFont));
                     });
@@ -206,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
                     device.setip(devobj.optString("ip", ""));
                     device.setstatus(devobj.optString("status", "OFFLINE"));
                     device.setlastseen(devobj.optLong("last_seen", 0));
+
+                    // MOI MAC TỪ FIREBASE. NẾU TRONG DEVOBJ ĐÉO CÓ THÌ LẤY LUÔN CÁI KEY!
+                    device.setmac(devobj.optString("mac", key));
+
                     ans.add(device);
                 }
             }

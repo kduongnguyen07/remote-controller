@@ -47,4 +47,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

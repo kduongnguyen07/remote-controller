@@ -19,7 +19,7 @@ public class Main {
         String ip = MacUtil.getIpAddress();
         String name = MacUtil.getDeviceName();
 
-        // Shutdown Hook: Báo Offline trước khi JVM bị kill[cite: 25]
+        // Shutdown Hook: Báo Offline trước khi JVM bị kill
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             firebaseservice.updateDeviceInfo(mac, name, ip, "OFFLINE");
         }));
@@ -35,8 +35,29 @@ public class Main {
             }
         }, 60000, 60000);
 
+        // Gọi hàm hiện QR ở đây (đã mang ra ngoài)
+        show_qr(ip, name, mac);
+
         socketserver = new SocketServer();
         socketserver.start();
+    }
+
+    // HÀM HIỆN QR ĐÃ ĐƯỢC LÔI RA KHỎI MAIN
+    public static void show_qr(String ip, String name, String mac) {
+        try {
+            // Nét căng: Nhét cả MAC vào JSON để lát bật máy
+            String data = "{\"ip\":\"" + ip + "\", \"name\":\"" + name + "\", \"mac\":\"" + mac + "\"}";
+
+            com.google.zxing.common.BitMatrix matrix = new com.google.zxing.MultiFormatWriter().encode(data, com.google.zxing.BarcodeFormat.QR_CODE, 250, 250);
+            java.awt.image.BufferedImage img = com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(matrix);
+
+            javax.swing.JFrame frame = new javax.swing.JFrame("Quét QR để điều khiển");
+            frame.add(new javax.swing.JLabel(new javax.swing.ImageIcon(img)));
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+            frame.setVisible(true);
+        } catch (Exception e) {}
     }
 
     private static void setupSystemTray() {
