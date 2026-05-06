@@ -21,8 +21,8 @@ public class MonitorActivity extends AppCompatActivity {
     private ArrayList<Entry> cpuentries = new ArrayList<>();
     private int timeindex = 0;
 
-    // Các text view thông số
-    private android.widget.TextView tvcpuname, tvutil, tvprocs, tvram, tvthreads, tvuptime, tvgpu;
+    // Đã gộp gọn gàng, đéo bị đúp lỗi như của mày nữa
+    private android.widget.TextView tvcpuname, tvutil, tvprocs, tvram, tvthreads, tvuptime, tvgpu, tvpctime, tvbattery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,8 @@ public class MonitorActivity extends AppCompatActivity {
         tvthreads = findViewById(R.id.tv_threads);
         tvuptime = findViewById(R.id.tv_uptime);
         tvgpu = findViewById(R.id.tv_gpu);
+        tvpctime = findViewById(R.id.tv_pc_time);
+        tvbattery = findViewById(R.id.tv_battery);
         chartcpu = findViewById(R.id.chart_cpu);
 
         setup_task_manager_chart(chartcpu);
@@ -50,13 +52,13 @@ public class MonitorActivity extends AppCompatActivity {
         chart.getLegend().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
 
-        // Cấu hình trục X (Lưới dọc)
+        // Cấu hình trục X
         chart.getXAxis().setDrawLabels(false);
         chart.getXAxis().setDrawGridLines(true);
         chart.getXAxis().setGridColor(Color.parseColor("#333333"));
         chart.getXAxis().setGridLineWidth(1f);
 
-        // Cấu hình trục Y (Lưới ngang)
+        // Cấu hình trục Y
         chart.getAxisLeft().setTextColor(Color.parseColor("#888888"));
         chart.getAxisLeft().setDrawGridLines(true);
         chart.getAxisLeft().setGridColor(Color.parseColor("#333333"));
@@ -64,9 +66,8 @@ public class MonitorActivity extends AppCompatActivity {
         chart.getAxisLeft().setAxisMinimum(0f);
         chart.getAxisLeft().setAxisMaximum(100f);
 
-        // Vẽ đường sóng màu xanh Task Manager
         LineDataSet dataset = new LineDataSet(new ArrayList<>(), "");
-        dataset.setColor(Color.parseColor("#00A4EF")); // Xanh lơ Win 11
+        dataset.setColor(Color.parseColor("#00A4EF"));
         dataset.setDrawCircles(false);
         dataset.setLineWidth(1.5f);
         dataset.setDrawFilled(true);
@@ -100,6 +101,11 @@ public class MonitorActivity extends AppCompatActivity {
                         int gpuutil = ans.optInt("gpu_util", 0);
                         int gputemp = ans.optInt("gpu_temp", 0);
 
+                        String pctime = ans.optString("pc_time", "--:--");
+                        boolean ischarging = ans.optBoolean("is_charging", true);
+                        int batterypct = ans.optInt("battery_pct", 100);
+                        String batterystr = batterypct + "% " + (ischarging ? "⚡(Sạc)" : "🔋(Rút)");
+
                         runOnUiThread(() -> {
                             tvcpuname.setText(cpuname);
                             tvutil.setText(String.format("%.0f%%", cpuload));
@@ -108,10 +114,11 @@ public class MonitorActivity extends AppCompatActivity {
                             tvthreads.setText(String.valueOf(threads));
                             tvuptime.setText(uptime);
                             tvgpu.setText(gpuutil + "% - " + gputemp + "°C");
+                            tvpctime.setText(pctime);
+                            tvbattery.setText(batterystr);
 
-                            // Trượt đồ thị
                             cpuentries.add(new Entry(timeindex++, cpuload));
-                            if (cpuentries.size() > 60) cpuentries.remove(0); // 60 giây trượt
+                            if (cpuentries.size() > 60) cpuentries.remove(0);
 
                             LineDataSet dataset = (LineDataSet) chartcpu.getData().getDataSetByIndex(0);
                             dataset.setValues(cpuentries);

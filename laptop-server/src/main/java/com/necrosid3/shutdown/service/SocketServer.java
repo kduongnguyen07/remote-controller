@@ -44,7 +44,7 @@ public class SocketServer extends Thread {
 
                                 // Lấy thông số Task Manager bằng OSHI
                                 oshi.SystemInfo si = new oshi.SystemInfo();
-                                oshi.hardware.HardwareAbstractionLayer hal = si.getHardware();
+                                oshi.hardware.HardwareAbstractionLayer hal = si.getHardware(); // <--- hal CỦA MÀY ĐÂY
                                 oshi.software.os.OperatingSystem os = si.getOperatingSystem();
 
                                 ans.put("cpu_name", hal.getProcessor().getProcessorIdentifier().getName());
@@ -67,6 +67,24 @@ public class SocketServer extends Thread {
                                 } catch (Exception e) {}
                                 ans.put("gpu_util", gpuutil);
                                 ans.put("gpu_temp", gputemp);
+
+                                // Giờ máy tính
+                                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss");
+                                String pctime = sdf.format(new java.util.Date());
+                                ans.put("pc_time", pctime);
+
+                                // Trạng thái Pin & Sạc
+                                java.util.List<oshi.hardware.PowerSource> powersources = hal.getPowerSources();
+                                boolean ischarging = true;
+                                int batterypct = 100;
+
+                                if (!powersources.isEmpty()) {
+                                    oshi.hardware.PowerSource ps = powersources.get(0);
+                                    ischarging = ps.isPowerOnLine();
+                                    batterypct = (int) (ps.getRemainingCapacityPercent() * 100);
+                                }
+                                ans.put("is_charging", ischarging);
+                                ans.put("battery_pct", batterypct);
 
                                 out.println(ans.toString());
                             } catch (Exception e) {

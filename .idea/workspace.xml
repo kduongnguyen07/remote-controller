@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e949c22-d612-4ce9-9f80-047462fc123b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/java/com/example/remoteshutdown/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/java/com/example/remoteshutdown/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/java/com/example/remoteshutdown/MonitorActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/java/com/example/remoteshutdown/MonitorActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_monitor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RemoteShutdown/app/src/main/res/layout/activity_monitor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/laptop-server/src/main/java/com/necrosid3/shutdown/service/SocketServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/laptop-server/target/classes/com/necrosid3/shutdown/service/SocketServer.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
