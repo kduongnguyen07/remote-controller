@@ -1,6 +1,15 @@
-package com.example.remoteshutdown; // Chỉnh lại theo package của mày
+package com.example.remoteshutdown;
 
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,23 +22,66 @@ public class ControlActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Ẩn thanh trạng thái (Pin, Giờ) cực mượt
         getWindow().setFlags(android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN, android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_control);
 
         targetip = getIntent().getStringExtra("IP_ADDRESS");
         String devicename = getIntent().getStringExtra("DEVICE_NAME");
 
-        android.widget.TextView tvname = findViewById(R.id.tv_device_name);
-        android.widget.TextView tvip = findViewById(R.id.tv_device_ip);
-        tvname.setText(devicename);
-        tvip.setText(targetip);
+        ((TextView) findViewById(R.id.tv_device_name)).setText(devicename);
+        ((TextView) findViewById(R.id.tv_device_ip)).setText(targetip);
 
-        // Bắt sự kiện mở 2 cái Popup
-        findViewById(R.id.btn_pop_volume).setOnClickListener(v -> show_volume_popup());
-        findViewById(R.id.btn_pop_power).setOnClickListener(v -> show_power_popup());
+        // --- ĐỒNG BỘ ẢNH NỀN VÀ FONT TỪ TRANG CHỦ ---
+        SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
+        String savedBg = prefs.getString("bg_uri", null);
+        String savedFont = prefs.getString("font_type", "SANS_SERIF");
 
-        // NỐI DÂY CHO NÚT BẬT TASK MANAGER ĐÂY MÀY
+        if (savedBg != null) {
+            try {
+                ((ImageView) findViewById(R.id.img_control_bg)).setImageURI(Uri.parse(savedBg));
+            } catch (Exception e) {}
+        }
+
+        findViewById(android.R.id.content).postDelayed(() -> applyFontToView(getWindow().getDecorView().getRootView(), getFontType(savedFont)), 100);
+
+        // --- XỬ LÝ THANH TRƯỢT VOLUME (JOG DIAL) ---
+        SeekBar sbVolume = findViewById(R.id.sb_volume);
+        sbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                int diff = progress - 50; // Tính toán xem lệch bao nhiêu so với tâm
+
+                if (diff > 0) {
+                    int steps = diff / 2; // Giả sử mỗi nấc kéo là 2% âm lượng
+                    for (int i = 0; i < steps; i++) send_socket_command("VOL_UP");
+                } else if (diff < 0) {
+                    int steps = Math.abs(diff) / 2;
+                    for (int i = 0; i < steps; i++) send_socket_command("VOL_DOWN");
+                }
+
+                // Kéo xong nảy lò xo về giữa
+                seekBar.setProgress(50);
+            }
+        });
+
+        // Nút Mute
+        findViewById(R.id.btn_mute).setOnClickListener(v -> send_socket_command("VOL_MUTE"));
+
+        // --- CÁC NÚT NGUỒN ---
+        findViewById(R.id.btn_off).setOnClickListener(v -> send_socket_command("OFF"));
+        findViewById(R.id.btn_lock).setOnClickListener(v -> send_socket_command("LOCK"));
+        findViewById(R.id.btn_sleep).setOnClickListener(v -> send_socket_command("SLEEP"));
+        findViewById(R.id.btn_abort).setOnClickListener(v -> send_socket_command("ABORT"));
+        findViewById(R.id.btn_timer).setOnClickListener(v -> show_timer_dialog());
+
+        // Bật Task Manager
         findViewById(R.id.btn_open_monitor).setOnClickListener(v -> {
             android.content.Intent ans = new android.content.Intent(ControlActivity.this, MonitorActivity.class);
             ans.putExtra("IP_ADDRESS", targetip);
@@ -37,43 +89,9 @@ public class ControlActivity extends AppCompatActivity {
         });
     }
 
-    // Hàm tạo Popup chứa danh sách Âm lượng
-    private void show_volume_popup() {
-        String[] res = {"Tăng âm lượng (+)", "Giảm âm lượng (-)", "Tắt tiếng (Mute)"};
-
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("ĐIỀU KHIỂN ÂM LƯỢNG");
-        builder.setItems(res, (dialog, which) -> {
-            if (which == 0) send_socket_command("VOL_UP");
-            else if (which == 1) send_socket_command("VOL_DOWN");
-            else if (which == 2) send_socket_command("VOL_MUTE");
-        });
-        builder.show();
-    }
-
-    // Hàm tạo Popup chứa danh sách Nguồn
-    private void show_power_popup() {
-        String[] ans = {"Khóa màn hình", "Ngủ (Sleep)", "Ngủ đông", "Hẹn giờ tắt máy", "Tắt máy NGAY!", "Hủy lệnh tắt"};
-
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("NGUỒN & HỆ THỐNG");
-        builder.setItems(ans, (dialog, which) -> {
-            if (which == 0) send_socket_command("LOCK");
-            else if (which == 1) send_socket_command("SLEEP");
-            else if (which == 2) send_socket_command("HIBERNATE");
-            else if (which == 3) show_timer_dialog(); // Riêng thằng này lại mở thêm 1 Popup nhập số phút
-            else if (which == 4) send_socket_command("OFF");
-            else if (which == 5) send_socket_command("ABORT");
-        });
-        builder.show();
-    }
-
-    // Hộp thoại nhập số phút
     private void show_timer_dialog() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle("Hẹn giờ tắt máy (Phút)");
-        builder.setMessage("Mày muốn tắt máy sau bao nhiêu phút nữa?");
-
         final android.widget.EditText input = new android.widget.EditText(this);
         input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
@@ -102,11 +120,32 @@ public class ControlActivity extends AppCompatActivity {
             boolean finalans = ans;
             runOnUiThread(() -> {
                 if (finalans) {
-                    android.widget.Toast.makeText(this, "Đã gửi lệnh: " + command, android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Đã gửi lệnh thành công", Toast.LENGTH_SHORT).show();
                 } else {
-                    android.widget.Toast.makeText(this, "Lỗi kết nối tới " + targetip, android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Lỗi kết nối tới " + targetip, Toast.LENGTH_SHORT).show();
                 }
             });
         }).start();
+    }
+
+    // Các hàm ép Font giống hệt Trang chủ
+    private Typeface getFontType(String fontName) {
+        switch (fontName) {
+            case "SERIF": return Typeface.SERIF;
+            case "MONOSPACE": return Typeface.MONOSPACE;
+            case "CURSIVE": return Typeface.create("cursive", Typeface.NORMAL);
+            default: return Typeface.SANS_SERIF;
+        }
+    }
+
+    private void applyFontToView(View view, Typeface typeface) {
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(typeface);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                applyFontToView(vg.getChildAt(i), typeface);
+            }
+        }
     }
 }

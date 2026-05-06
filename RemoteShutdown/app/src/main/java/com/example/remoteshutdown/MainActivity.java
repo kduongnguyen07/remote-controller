@@ -2,11 +2,13 @@ package com.example.remoteshutdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout layouthome, layoutsettings;
     private ImageView imgmainbg;
-    private boolean ismonospace = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +52,17 @@ public class MainActivity extends AppCompatActivity {
         layoutsettings = findViewById(R.id.layout_settings);
         imgmainbg = findViewById(R.id.img_main_bg);
 
-        // --- KHÚC NÀY TỰ ĐỘNG LOAD LẠI ẢNH NỀN KHI MỞ APP ---
+        // --- LOAD LẠI ẢNH NỀN VÀ FONT CŨ ĐÃ LƯU ---
         SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
         String savedBg = prefs.getString("bg_uri", null);
+        String savedFont = prefs.getString("font_type", "SANS_SERIF");
+
         if (savedBg != null) {
-            try {
-                imgmainbg.setImageURI(Uri.parse(savedBg));
-            } catch (SecurityException e) {
-                // Lỡ ảnh bị xóa khỏi máy thì bỏ qua
-            }
+            try { imgmainbg.setImageURI(Uri.parse(savedBg)); } catch (SecurityException e) {}
         }
+
+        // Cần delay một tí để View kịp vẽ ra trước khi ép Font
+        handler.postDelayed(() -> applyFontToView(getWindow().getDecorView().getRootView(), getFontType(savedFont)), 100);
 
         listdevices = new ArrayList<>();
         client = new OkHttpClient();
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // --- NÚT ĐỔI NỀN ĐÃ ĐƯỢC NÂNG CẤP LẤY QUYỀN ---
+        // Nút đổi nền
         findViewById(R.id.btn_change_bg).setOnClickListener(v -> {
             Intent res = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             res.addCategory(Intent.CATEGORY_OPENABLE);
@@ -107,30 +109,59 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(res, 100);
         });
 
+        // --- POPUP MENU CHỌN FONT CHỮ ---
         findViewById(R.id.btn_change_font).setOnClickListener(v -> {
-            ismonospace = !ismonospace;
-            android.graphics.Typeface newfont = ismonospace ? android.graphics.Typeface.MONOSPACE : android.graphics.Typeface.DEFAULT_BOLD;
-            ((TextView) findViewById(R.id.tv_title_home)).setTypeface(newfont);
-            ((TextView) findViewById(R.id.tv_title_settings)).setTypeface(newfont);
-            Toast.makeText(this, "Đã đổi Font chữ!", Toast.LENGTH_SHORT).show();
+            String[] ans = {"Mặc định (Sang trọng)", "Có chân (Cổ điển)", "Monospace (Dân code)", "Cursive (Mềm mại)"};
+
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("Chọn phong cách chữ")
+                    .setItems(ans, (dialog, which) -> {
+                        String selected = "SANS_SERIF";
+                        if (which == 1) selected = "SERIF";
+                        else if (which == 2) selected = "MONOSPACE";
+                        else if (which == 3) selected = "CURSIVE";
+
+                        // Lưu vào sổ tay
+                        getSharedPreferences("AppConfig", MODE_PRIVATE).edit().putString("font_type", selected).apply();
+
+                        // Ép font mới lên toàn màn hình ngay lập tức
+                        applyFontToView(getWindow().getDecorView().getRootView(), getFontType(selected));
+                        Toast.makeText(this, "Đã đổi Font chữ!", Toast.LENGTH_SHORT).show();
+                    }).show();
         });
     }
 
-    // --- XỬ LÝ LƯU ẢNH NỀN VĨNH VIỄN VÀO BỘ NHỚ ---
+    // --- HÀM HỖ TRỢ LẤY FONT ---
+    private Typeface getFontType(String fontName) {
+        switch (fontName) {
+            case "SERIF": return Typeface.SERIF;
+            case "MONOSPACE": return Typeface.MONOSPACE;
+            case "CURSIVE": return Typeface.create("cursive", Typeface.NORMAL);
+            default: return Typeface.SANS_SERIF;
+        }
+    }
+
+    // --- HÀM ĐỆ QUY ÉP FONT CHO MỌI CHỮ TRÊN MÀN HÌNH ---
+    private void applyFontToView(View view, Typeface typeface) {
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(typeface);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                applyFontToView(vg.getChildAt(i), typeface);
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
             Uri res = data.getData();
             if (res != null) {
-                // Xin Android cấp quyền truy cập cái ảnh này mãi mãi
                 getContentResolver().takePersistableUriPermission(res, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                // Lưu đường dẫn ảnh vào sổ tay SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("AppConfig", MODE_PRIVATE);
                 prefs.edit().putString("bg_uri", res.toString()).apply();
-
-                // Set ảnh lên màn hình luôn
                 imgmainbg.setImageURI(res);
             }
         }
@@ -151,6 +182,10 @@ public class MainActivity extends AppCompatActivity {
                         listdevices.clear();
                         listdevices.addAll(newlist);
                         adapter.notifyDataSetChanged();
+
+                        // Ép font cho mấy cái thẻ máy tính vừa mới load về
+                        String savedFont = getSharedPreferences("AppConfig", MODE_PRIVATE).getString("font_type", "SANS_SERIF");
+                        applyFontToView(rvdevices, getFontType(savedFont));
                     });
                 }
             }

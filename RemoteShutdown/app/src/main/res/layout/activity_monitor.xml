@@ -5,54 +5,61 @@
     android:orientation="vertical"
     android:background="#121212"
     android:fitsSystemWindows="true"
-    android:padding="24dp">
+    android:paddingHorizontal="36dp"
+    android:paddingVertical="32dp">
 
+    <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="12dp">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="CPU" android:textColor="#FFFFFF" android:textSize="32sp" android:textStyle="bold" />
         <TextView android:id="@+id/tv_cpu_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đang lấy thông số..." android:textColor="#CCCCCC" android:textSize="14sp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="% Utilization" android:textColor="#888888" android:textSize="14sp" android:layout_marginBottom="16dp"/>
 
+    <!-- Biểu đồ -->
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart_cpu"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_marginBottom="32dp"/>
+        android:layout_height="250dp"
+        android:layout_marginBottom="36dp"/>
 
+    <!-- Cấu trúc 2 cột đã được bóp vào giữa -->
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
 
+        <!-- Hàng 1 -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginBottom="24dp">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="16dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Utilization" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_util" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0%" android:textColor="#FFFFFF" android:textSize="24sp" android:textStyle="bold"/>
             </LinearLayout>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="8dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RAM Used" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_ram" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 GB" android:textColor="#FFFFFF" android:textSize="24sp" android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Hàng 2 -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginBottom="24dp">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="16dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Processes" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_procs" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
             </LinearLayout>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="8dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Threads" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_threads" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Hàng 3 -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="16dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Up time" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_uptime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0:00:00" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
             </LinearLayout>
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="8dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="GPU RTX" android:textColor="#888888" android:textSize="14sp"/>
                 <TextView android:id="@+id/tv_gpu" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0% - 0°C" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
             </LinearLayout>
